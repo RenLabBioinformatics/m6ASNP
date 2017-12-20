@@ -1,0 +1,33 @@
+Usage: java -jar m6AVarAnno.jar [Flags] [Options]
+
+Flags:
+   -predict    Predict m6A alteration based on VCF file
+   -verify     Verify input file format
+   -go         Annotate the functional roles of genes using GOSlim data
+
+Options:
+   Predict m6A from vcf:
+     -i        Input file
+     -it       Input file format, default: vcf (vcf, tab)
+     -a        Known gene annotation file from UCSC
+     -g        The genome sequence file (2bit format)
+     -t        The prediction threshold, default: Medium (High, Medium, Low)
+     -o        The output file
+     -ot       The output format, default: txt. (txt, js, json, gff, vcf, csv, bed, tsv)
+     -isAll    Is output all m6A mutations, or just output gain/loss mutations. Default: false (true or false)
+
+   Verify input file format:
+     -i        Input file
+
+   Annotate gene's functional roles
+     -i        Input file (the m6ASNP prediction results)
+     -obo      The GO term definition file in obo format
+     -anno     The gene annotation file from Gene Ontology
+     -ns       The GO namespaces used to annotate gene functions, default: bp (bp, mf, cc)
+     -o        The output file
+     -num      The number of annotated terms preserved in the output file, default: 9
+
+Example:
+   java -jar m6AVarAnno.jar -predict -i test.vcf -a Knowngene_hg19.txt -g hg19.2bit -o out -ot txt -isAll false
+   java -jar m6AVarAnno.jar -verify -i test.vcf
+   java -jar m6AVarAnno.jar -go -i input.txt -obo goslim.obo -anno human.gaf -ns bp,mf,cc -o out -num 9
