@@ -9,5 +9,5 @@ alterations. Whilst in the opposite case, we defined them as m6A-gain alteration
 developed an analysis pipeline to interpret the landscape distribution of predicted m6A alterations at a whole genomic level. Multiple 
 statistical diagrams and genome browser are also embed in the web server to provide visualization for all the analysis results.</p>
 <br/>
-![image](http://app.renlab.org/m6ASNP/img/PredictionModel.png)
+![](http://app.renlab.org/m6ASNP/img/PredictionModel.png)
 <br/>
