@@ -1,0 +1,16 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="m6AVarAnno:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/m6AVarAnno_jar</output-path>
+    <root id="archive" name="m6AVarAnno.jar">
+      <element id="module-output" name="m6AVarAnno" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/com/github/samtools/htsjdk/2.6.1/htsjdk-2.6.1.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/apache/commons/commons-compress/1.4.1/commons-compress-1.4.1.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/commons-logging/commons-logging/1.1.1/commons-logging-1.1.1.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/tukaani/xz/1.5/xz-1.5.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/gov/nih/nlm/ncbi/ngs-java/1.2.4/ngs-java-1.2.4.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/apache/commons/commons-jexl/2.1.1/commons-jexl-2.1.1.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/json/json/20160810/json-20160810.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/xerial/snappy/snappy-java/1.0.3-rc3/snappy-java-1.0.3-rc3.jar" path-in-jar="/" />
+    </root>
+  </artifact>
+</component>
