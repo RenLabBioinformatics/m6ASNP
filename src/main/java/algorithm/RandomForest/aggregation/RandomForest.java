@@ -15,6 +15,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 
 /**
@@ -25,6 +26,7 @@ public class RandomForest {
     private ArrayList<Tree> treeList = new ArrayList();
     private ArrayList<Integer> dataAttrTypeList;
     private HashMap<Double, Integer> classType = new HashMap();
+    private double[] importance;
     
     public RandomForest(ArrayList<double[]> trainingDataList, ArrayList<Integer> dataAttrTypeList, int treeNumber, int splitNum, int minNodeNum, double minNodeError)
     {
@@ -33,15 +35,22 @@ public class RandomForest {
             inSplitNum = (int)Math.sqrt(trainingDataList.get(0).length - 1) + 1;
         else
             inSplitNum = splitNum;
+        importance = new double[dataAttrTypeList.size()];
+        Arrays.fill(importance, 0);
         for(int i=1; i<=treeNumber; i++)
         {
             Tree tree = new Tree(trainingDataList, dataAttrTypeList, inSplitNum, minNodeNum, minNodeError);
             tree.CreateTree();
+            double[] treeImp = tree.getImportance();
+            for(int j=0; j<treeImp.length; j++)
+                importance[j] = importance[j] + treeImp[j];
             tree.CleanTree();
             treeList.add(tree);
-//            System.out.println("Constructed tree " + i);
+            System.out.println("Constructed tree " + i);
         }
         this.dataAttrTypeList = dataAttrTypeList;
+        for(int i=0; i<importance.length; i++)
+            importance[i] = importance[i] / ((double)treeNumber);
     }
     
     public RandomForest(File forestModelFile)
@@ -198,14 +207,26 @@ public class RandomForest {
         for(int i=0; i<treeList.size(); i++)
             treeList.get(i).CleanTree();
     }
-    
-    public static void main(String[] args) 
+
+    public double[] getImportance() {
+        return importance;
+    }
+
+    public double getImportance(int index)
+    {
+        return importance[index];
+    }
+
+    public static void main(String[] args)
     {
         //Training
         DataReader dataReader = new DataReader("G:\\云同步文件夹\\工作文档\\RNA-methylation\\NewModel\\TrainingData_AC\\MethylationDataMouse_Part.rf");
         ArrayList<Integer> dataAtrrTypeList = dataReader.getDataAttrTypeList();
         ArrayList<double[]> trainingList = dataReader.getDataList();
         RandomForest rf = new RandomForest(trainingList, dataAtrrTypeList, 100, 0, 1000, 10E-06);
+        double[] imp = rf.getImportance();
+        for(int i=0; i<imp.length; i++)
+            System.out.println(imp[i]);
         rf.SaveForest("G:\\云同步文件夹\\工作文档\\RNA-methylation\\NewModel\\TrainingData_AC\\MethylationRFModelMouse.txt");
         System.out.println("OK!");
     }

@@ -29,6 +29,7 @@ public class Tree {
     private ArrayList<Integer> dataAttrTypeList;//Attributes type list, two possibilities: Continuous or Discrete
     private double oobError;//Out-of-bag error
     private int curIndex;
+    private double[] importance;//Variable importance
     
     public Tree(ArrayList<double[]> sourceDataList, ArrayList<Integer> dataAtrrTypeList, int splitNum, int minNodeNum, double minNodeError)
     {
@@ -38,6 +39,7 @@ public class Tree {
         this.splitNum = splitNum;
         this.minNodeNum = minNodeNum;
         this.minNodeError = minNodeError;
+        importance = new double[attrLen];
         //set root
         root = new Node(dataList);
         curIndex = 1;
@@ -224,6 +226,7 @@ public class Tree {
                             maxDecreasedImpurity = decreasedImpurity;
                             maxSplitIndex = checkIndex;
                             maxSplitValue = (nodeDataList.get(checkSplitList.get(j))[checkIndex] + nodeDataList.get(checkSplitList.get(j)+1)[checkIndex])/2;
+                            importance[maxSplitIndex] = importance[maxSplitIndex] + maxDecreasedImpurity;
                         }
                     }
                 }
@@ -254,6 +257,7 @@ public class Tree {
                             maxDecreasedImpurity = descreasedImpurity;
                             minSplitValueList = splitValueList;
                             maxSplitIndex = checkIndex;
+                            importance[maxSplitIndex] = importance[maxSplitIndex] + maxDecreasedImpurity;
                         }
                     }
                 }
@@ -304,6 +308,9 @@ public class Tree {
     
     public void CreateTree()
     {
+        //Clean up the importance vector
+        for(int i=0; i<importance.length; i++)
+            importance[i] = 0;
         RecursiveSplit(root);
 //        oobError = OOBEstimate();
     }
@@ -424,14 +431,26 @@ public class Tree {
         TreeSaverAndParser treeSaver = new TreeSaverAndParser(root);
         return treeSaver.getTreeString();
     }
-    
-    public static void main(String[] args) 
+
+    public double[] getImportance() {
+        return importance;
+    }
+
+    public double getImportance(int index)
+    {
+        return importance[index];
+    }
+
+    public static void main(String[] args)
     {
         DataReader dataReader = new DataReader("G:\\云同步文件夹\\工作文档\\RNA-methylation\\DataModel\\MethyData.rf");
         ArrayList<Integer> dataAtrrTypeList = dataReader.getDataAttrTypeList();
         ArrayList<double[]> trainingList = dataReader.getDataList();
         Tree tree = new Tree(trainingList, dataAtrrTypeList, 9, 5, 10E-06);
         tree.CreateTree();
+        double[] importance = tree.getImportance();
+        for(int i=0; i<importance.length; i++)
+            System.out.println(importance[i]);
         System.out.println("OK!");
     }
 }
