@@ -15,7 +15,7 @@ statistical diagrams and genome browser are also embed in the web server to prov
 ## 2.Installation of m6ASNP
 ```
 #Download from Github
-git clone https://github.com/YubinXieSYSU/m6ASNP.git
+git clone https://github.com/RenLabBioinformatics/m6ASNP.git
 cd  m6AVarAnno
 
 #Complie the source code
