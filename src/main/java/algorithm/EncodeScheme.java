@@ -15,7 +15,7 @@ import java.util.HashMap;
 public class EncodeScheme {
     private HashMap<String, Double> nucleotideMap = new HashMap();
     int up, down;
-    
+
     private int kSpace;
     private HashMap<String, Integer> encodeMap = new HashMap();
     private final String nucleotide = "TCGA";
@@ -33,23 +33,23 @@ public class EncodeScheme {
         nucleotideMap.put("C", 3D);
         nucleotideMap.put("G", 4D);
         
-//        int index = up + down;
-//        for(int i=0; i<secondaryNotation.length(); i++)
-//        {
-//            for(int j=0; j<secondaryNotation.length(); j++)
-//            {
-//                for(int k=0; k<secondaryNotation.length(); k++)
-//                {
-//                    encodeMap.put("" + secondaryNotation.charAt(i) + secondaryNotation.charAt(j) + secondaryNotation.charAt(k), index);
-//                    index++;
-//                }
-//            }
-//        }
+        int index = up + down;
+        for(int i=0; i<secondaryNotation.length(); i++)
+        {
+            for(int j=0; j<secondaryNotation.length(); j++)
+            {
+                for(int k=0; k<secondaryNotation.length(); k++)
+                {
+                    encodeMap.put("" + secondaryNotation.charAt(i) + secondaryNotation.charAt(j) + secondaryNotation.charAt(k), index);
+                    index++;
+                }
+            }
+        }
         
-        vector = new double[up + down];
+        vector = new double[up + 1 + down + 27];
         this.up = up;
         this.down = down;
-//        nussAlign = new NussinovAlignment();
+        nussAlign = new NussinovAlignment();
     }
     
 //    public EncodeScheme(int kSpace)
@@ -103,6 +103,12 @@ public class EncodeScheme {
             else
                 vector[i] = -1;
         }
+        //Center
+        nucleotide = "" + nucleotideSeq.charAt(30);
+            if(nucleotideMap.containsKey(nucleotide))
+                vector[30] = nucleotideMap.get(nucleotide);
+            else
+                vector[30] = -1;
         //downstream
         for(int i=up+1; i<=up+down; i++)
         {
@@ -150,16 +156,23 @@ public class EncodeScheme {
     
     private void EncodeSecondaryStructure(String secondarySeq)
     {
-        for(int i=0; i<=secondarySeq.length()-3; i++)
+        double sum = 0;
+        for(int i=0; i<secondarySeq.length()-3; i++)
         {
             String secStrutSeg = secondarySeq.substring(i, i+3);
             if(encodeMap.containsKey(secStrutSeg))
             {
                 int index = encodeMap.get(secStrutSeg);
                 vector[index]++;
+                sum++;
             }
-//            else
-//                System.out.println("Unknown secondary structure " + secStrutSeg);
+            else
+                System.out.println("Unknown secondary structure " + secStrutSeg);
+        }
+        for(String secStrutSeg : encodeMap.keySet())
+        {
+            int index = encodeMap.get(secStrutSeg);
+            vector[index] = vector[index]/sum;
         }
     }
     
@@ -174,14 +187,22 @@ public class EncodeScheme {
         ClearVector();
         EncodeFlanking(nucleotideSeq);
 //        EncodeKPair(nucleotideSeq);
-//        nussAlign.setSequence(nucleotideSeq);
-//        nussAlign.PredictSecondaryStructure();
-//        String secondarySeq = nussAlign.getStructure();
-//        EncodeSecondaryStructure(secondarySeq);
+        nussAlign.setSequence(nucleotideSeq);
+        nussAlign.PredictSecondaryStructure();
+        String secondarySeq = nussAlign.getStructure();
+        EncodeSecondaryStructure(secondarySeq);
     }
     
     public double[] getVector()
     {
         return vector;
+    }
+    
+    public static void main(String[] args) {
+        EncodeScheme encodeShceme = new EncodeScheme(30, 30);
+        encodeShceme.Encode("AGCTCCGCGCCGCCCTGGACAGGTTCCGGGACTGGCAGGTCCGCTGTCCCGACTGGTTCGA");
+        double[] vec = encodeShceme.getVector();
+        for(int i=0; i<vec.length; i++)
+            System.out.println(vec[i]);
     }
 }

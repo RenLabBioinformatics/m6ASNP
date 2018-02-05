@@ -20,12 +20,28 @@ public class MutationPredictor {
     private HashMap<String, LinkedList<MethylationMutationRecord>> methyMutMap;
     private ParameterRecord paramRec;
     
-    public MutationPredictor(HashMap<String, LinkedList<MethylationMutationRecord>> methyMutMap)
+    public MutationPredictor(HashMap<String, LinkedList<MethylationMutationRecord>> methyMutMap, String species)
     {
         this.methyMutMap = methyMutMap;
-        ParameterReader paramReader = new ParameterReader("/Model/ParamHuman.txt");
-        paramRec = paramReader.getParamRec();
-        randomForest = new RandomForest("/Model/MethylationRFModelHuman.txt");
+        if(species.equalsIgnoreCase("Human"))
+        {
+            ParameterReader paramReader = new ParameterReader("/Model/ParamHuman.txt");
+            paramRec = paramReader.getParamRec();
+            randomForest = new RandomForest("/Model/MethylationRFModelHuman.txt");
+        }
+        else if(species.equalsIgnoreCase("Mouse"))
+        {
+            ParameterReader paramReader = new ParameterReader("/Model/ParamMouse.txt");
+            paramRec = paramReader.getParamRec();
+            randomForest = new RandomForest("/Model/MethylationRFModelMouse.txt");
+        }
+        else
+        {
+            System.out.println("Unsupported species " + species + ". Set to human model.");
+            ParameterReader paramReader = new ParameterReader("/Model/ParamHuman.txt");
+            paramRec = paramReader.getParamRec();
+            randomForest = new RandomForest("/Model/MethylationRFModelHuman.txt");
+        }
         encode = new EncodeScheme(paramRec.getUp(), paramRec.getDown());
     }
     
@@ -58,8 +74,8 @@ public class MutationPredictor {
                 boolean isTumorPositive = false;
                 if(methyMutRec.getMutationSeq().substring(paramRec.getUp(), paramRec.getUp() + 2).equals("AC"))
                 {
-                    if(methyMutRec.getMutationSeq().length() != (paramRec.getUp() + paramRec.getDown() + 1))
-                        System.out.println("Got");
+//                    if(methyMutRec.getMutationSeq().length() != (paramRec.getUp() + paramRec.getDown() + 1))
+//                        System.out.println("Got");
                     encode.Encode(methyMutRec.getMutationSeq());
                     double[] tumorVector = encode.getVector();
                     classIndex = randomForest.PredictValue(tumorVector);

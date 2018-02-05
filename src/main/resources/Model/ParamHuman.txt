@@ -1,6 +1,6 @@
 Up = 30
 Down = 30
-High = 0.62
-Medium = 0.50
-Low = 0.40
+High = 0.76
+Medium = 0.69
+Low = 0.62
 All = 0

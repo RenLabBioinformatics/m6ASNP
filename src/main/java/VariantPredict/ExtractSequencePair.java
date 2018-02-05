@@ -74,8 +74,8 @@ public class ExtractSequencePair
             }
             shiftCount = shiftCount + (mutCodeLen - refCodeLen);
         }
-        else
-            System.out.println("Skip conflicting reference code for " + refCode);
+//        else
+//            System.out.println("Skip conflicting reference code for " + refCode);
         return shiftCount;
     }
 
@@ -96,8 +96,8 @@ public class ExtractSequencePair
                 mutationPosition = vcfRec.getPosition() - 1 - refChrStart;
                 if( (mutationPosition + shiftCount >= 0 ) && (mutationPosition + shiftCount + vcfRec.getRefBase().length() < mutatedSeq.length()) )
                     shiftCount = SequenceReplace(mutatedSeq, mutationPosition + shiftCount, vcfRec.getRefBase(), vcfRec.getMutBase(), shiftCount);
-                else
-                    System.out.println("Coordinate conflicting! Skip mutation: " + vcfRec.getChromosome() + ":" + vcfRec.getPosition() + "  " + vcfRec.getRefBase() + " -> " + vcfRec.getMutBase());
+//                else
+//                    System.out.println("Coordinate conflicting! Skip mutation: " + vcfRec.getChromosome() + ":" + vcfRec.getPosition() + "  " + vcfRec.getRefBase() + " -> " + vcfRec.getMutBase());
             }
             else
             {
@@ -106,8 +106,8 @@ public class ExtractSequencePair
                     mutationPosition = mutationPosition - (vcfRec.getMutBase().length() - 1);
                 if( (mutationPosition + shiftCount >= 0 ) && (mutationPosition + shiftCount + vcfRec.getRefBase().length() < mutatedSeq.length()) )
                     shiftCount = SequenceReplace(mutatedSeq, mutationPosition + shiftCount, Tools.reverseSequence(vcfRec.getRefBase()), Tools.reverseSequence(vcfRec.getMutBase()), shiftCount);
-                else
-                    System.out.println("Coordinate conflicting! Skip mutation: " + vcfRec.getChromosome() + ":" + vcfRec.getPosition() + "  " + vcfRec.getRefBase() + " -> " + vcfRec.getMutBase());
+//                else
+//                    System.out.println("Coordinate conflicting! Skip mutation: " + vcfRec.getChromosome() + ":" + vcfRec.getPosition() + "  " + vcfRec.getRefBase() + " -> " + vcfRec.getMutBase());
             }
             if( mutationPosition < m6APosition )
                 mutatedM6APosition = m6APosition + shiftCount;

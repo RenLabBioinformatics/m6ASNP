@@ -25,8 +25,9 @@ public class MethylationMutationPredictor
     private HashMap<String, SampleVCFMutation> sampleMutationMap;
     private String genomeFilePath;
     private HashMap<String, LinkedList<MethylationMutationRecord>> methyMutationMap;
+    private String species;
     
-    public MethylationMutationPredictor(String ucscAnnotationFilePath, String mutFilePath, String infmt, String genomeFilePath)
+    public MethylationMutationPredictor(String ucscAnnotationFilePath, String mutFilePath, String infmt, String genomeFilePath, String species)
     {
         ucscAnnoReader = new UCSCAnnoReader(ucscAnnotationFilePath);
         if(infmt.equals("vcf"))
@@ -47,7 +48,17 @@ public class MethylationMutationPredictor
         }
 
         this.genomeFilePath = genomeFilePath;
-        ParameterReader paramReader = new ParameterReader("/Model/ParamHuman.txt");
+        this.species = species;
+        ParameterReader paramReader;
+        if(species.equalsIgnoreCase("Human"))
+            paramReader = new ParameterReader("/Model/ParamHuman.txt");
+        else if(species.equalsIgnoreCase("Mouse"))
+            paramReader = new ParameterReader("/Model/ParamMouse.txt");
+        else
+        {
+            System.out.println("Unsupported species " + species + ". Set to human model.");
+            paramReader = new ParameterReader("/Model/ParamHuman.txt");
+        }
         paramRec = paramReader.getParamRec();
     }
     
@@ -63,7 +74,7 @@ public class MethylationMutationPredictor
         refineMutation.RefineAll(paramRec.getUp(), paramRec.getDown());
         refineMutation.CloseGenome();
         //Predic functional change
-        MutationPredictor mutPredictor = new MutationPredictor(methyMutationMap);
+        MutationPredictor mutPredictor = new MutationPredictor(methyMutationMap, species);
         mutPredictor.Predict(threshod);
     }
     
@@ -100,7 +111,7 @@ public class MethylationMutationPredictor
     
     public static void main(String[] args) 
     {
-        MethylationMutationPredictor methyMutPredictor = new MethylationMutationPredictor("G:\\云同步文件夹\\工作文档\\RNA-methylation\\TCGA\\knownGeneAnnotation_hg19", "G:\\云同步文件夹\\工作文档\\RNA-methylation\\m6AVarAnno\\ClinVar\\common_and_clinical_20170905.tab", "tab", "G:\\Genome\\2bit\\hg19.2bit");
+        MethylationMutationPredictor methyMutPredictor = new MethylationMutationPredictor("G:\\云同步文件夹\\工作文档\\RNA-methylation\\TCGA\\knownGeneAnnotation_hg19", "G:\\云同步文件夹\\工作文档\\RNA-methylation\\m6AVarAnno\\ClinVar\\common_and_clinical_20170905.tab", "tab", "G:\\Genome\\2bit\\hg19.2bit", "Human");
         methyMutPredictor.Predict("High");
         methyMutPredictor.SaveResult("G:\\云同步文件夹\\工作文档\\RNA-methylation\\m6AVarAnno\\ClinVar\\Result_Tab.txt", "txt", false);
     }

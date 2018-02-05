@@ -51,6 +51,8 @@ public class m6AMutationConsole
             paramMap.put("-isAll", "false");
             paramMap.put("-t", "Medium");
             paramMap.put("-it", "vcf");
+            paramMap.put("-sp", "Human");
+            paramMap.put("-ot", "txt");
             int curIndex = 0;
             while(true)
             {
@@ -60,7 +62,7 @@ public class m6AMutationConsole
                     break;
             }
             System.out.println("Reading input file...");
-            MethylationMutationPredictor methMutationPredictor = new MethylationMutationPredictor(paramMap.get("-a"), paramMap.get("-i"), paramMap.get("-it"), paramMap.get("-g"));
+            MethylationMutationPredictor methMutationPredictor = new MethylationMutationPredictor(paramMap.get("-a"), paramMap.get("-i"), paramMap.get("-it"), paramMap.get("-g"), paramMap.get("-sp"));
             System.out.println("Predicting m6A variation at threshold " + paramMap.get("-t") + "...");
             methMutationPredictor.Predict(paramMap.get("-t"));
             System.out.println("Saving result...");

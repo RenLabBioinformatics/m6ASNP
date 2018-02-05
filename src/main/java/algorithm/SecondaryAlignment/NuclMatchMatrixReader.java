@@ -6,7 +6,6 @@
 package algorithm.SecondaryAlignment;
 
 import java.io.BufferedReader;
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.HashMap;
@@ -22,7 +21,7 @@ public class NuclMatchMatrixReader {
     {
         try
         {
-            BufferedReader br = new BufferedReader(new InputStreamReader(NuclMatchMatrixReader.class.getResourceAsStream("/algorithm/SecondaryAlignment/NuclMatchMatrix.txt")));
+            BufferedReader br = new BufferedReader(new InputStreamReader(NuclMatchMatrixReader.class.getResourceAsStream("/NuclMatchMatrix.txt")));
             String strLine = br.readLine().trim();
             String[] tmpArr = strLine.split("\\s+");
             String matrixTitle = "";

@@ -1,0 +1,17 @@
+Usage: java -jar m6ASNP.jar [Flags] [Options]
+
+Flags:
+   -predict    Predict m6A alteration based on VCF file
+
+Options:
+   Predict m6A-association from vcf or tab file:
+     -i        Input file
+     -it       Input file format, default: vcf (vcf, tab)
+     -sp       The species, default: Human (Human or Mouse)
+     -a        Known gene annotation file from UCSC
+     -g        The genome sequence file (2bit format)
+     -t        The prediction threshold, default: Medium (High, Medium, Low)
+     -o        The output file
+
+Example:
+   java -jar m6AVarAnno.jar -predict -i test.vcf -sp Human -a Knowngene_hg19.txt -g hg19.2bit -o out.txt
